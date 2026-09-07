@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TODO // LIST</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <p class="eyebrow">GET THINGS DONE.</p>
+    <h1>MY TODO<br>LIST<span>!</span></h1>
+
+    <form id="todo-form" class="todo-form">
+      <label for="task">WHAT NEEDS DOING?</label>
+      <div class="form-row">
+        <input id="task" type="text" placeholder="Write a task..." autocomplete="off" required>
+        <button type="submit">ADD +</button>
+      </div>
+    </form>
+
+    <section class="todo-panel">
+      <div class="panel-heading">
+        <h2>THE LIST</h2>
+        <span id="count">0 TASKS</span>
+      </div>
+      <p id="message" class="message" aria-live="polite"></p>
+      <ul id="todo-list"></ul>
+    </section>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
