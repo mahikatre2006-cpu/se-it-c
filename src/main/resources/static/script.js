@@ -4,13 +4,15 @@ const taskInput = document.querySelector("#task");
 const list = document.querySelector("#todo-list");
 const count = document.querySelector("#count");
 const message = document.querySelector("#message");
+let todos = [];
 
 function showMessage(text) { message.textContent = text; }
 
 async function request(url, options = {}) {
   const response = await fetch(url, { headers: { "Content-Type": "application/json" }, ...options });
   if (!response.ok) throw new Error("Request failed");
-  return response.status === 204 ? null : response.json();
+  const body = await response.text();
+  return body ? JSON.parse(body) : null;
 }
 
 function render(todos) {
@@ -29,7 +31,7 @@ function render(todos) {
 }
 
 async function loadTodos() {
-  try { render(await request(API)); showMessage(""); }
+  try { todos = await request(API); render(todos); showMessage(""); }
   catch { showMessage("CAN'T REACH THE API. START SPRING BOOT FIRST."); }
 }
 async function update(todo, completed) {
@@ -37,8 +39,18 @@ async function update(todo, completed) {
   catch { showMessage("COULDN'T UPDATE THAT TASK."); }
 }
 async function remove(id) {
-  try { await request(`${API}/${id}`, { method: "DELETE" }); loadTodos(); }
-  catch { showMessage("COULDN'T DELETE THAT TASK."); }
+  const previousTodos = todos;
+  todos = todos.filter(todo => todo.id !== id);
+  render(todos);
+  showMessage("");
+
+  try {
+    await request(`${API}/${id}`, { method: "DELETE" });
+  } catch {
+    todos = previousTodos;
+    render(todos);
+    showMessage("COULDN'T DELETE THAT TASK.");
+  }
 }
 form.addEventListener("submit", async event => {
   event.preventDefault();

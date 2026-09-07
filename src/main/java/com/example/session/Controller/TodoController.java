@@ -1,6 +1,7 @@
 package com.example.session;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,7 +33,11 @@ public class TodoController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteTodo(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteTodo(@PathVariable Long id) {
+        if (!todoRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
         todoRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }
